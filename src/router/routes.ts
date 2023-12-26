@@ -1,3 +1,4 @@
+import DialogCloseVue from '@/views/dialog/DialogClose.vue'
 import DropdownListing from '@/views/dropdown-listing/DropdownListing.vue'
 import DropdownPlacementVue from '@/views/dropdown-placement/DropdownPlacement.vue'
 import DropdownFixVue from '@/views/dropdown/DropdownFix.vue'
@@ -23,6 +24,13 @@ export const routes: RouteRecordRaw[] = [
     component: DropdownListing,
     props: {
       name: '[Feature] Dropdown listing'
+    }
+  },
+  {
+    path: '/dialog-close-api',
+    component: DialogCloseVue,
+    props: {
+      name: '[Feature] Dialog Close API'
     }
   }
 ]
