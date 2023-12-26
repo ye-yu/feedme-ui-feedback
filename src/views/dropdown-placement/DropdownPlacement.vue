@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const options = [
   {
     label: 'Gramme',
-    value: null
+    value: 'null'
   },
   {
     label: 'PCS',
@@ -36,7 +36,11 @@ const possiblePlacements = [
 
 <template>
   <div class="px-[100px] py-5 flex flex-col gap-5">
-    <div class="font-bold">Dropdown placement syntax not sensible</div>
+    <div class="font-bold">[v0.0.14] Dropdown placement syntax not sensible</div>
+    <div class="text-xs">
+      <span style="color: red">*</span>
+      Note: in v0.0.17, dropdown does not close when other dropdown is selected
+    </div>
     <FmSelect
       v-for="placement in possiblePlacements"
       :key="placement"

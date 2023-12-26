@@ -41,7 +41,14 @@ const selectedValueActual = computed(() =>
 
 <template>
   <div class="px-[100px] py-5 flex flex-col gap-5">
-    <div class="font-bold">Input text is greyed out if the value is <code>null</code></div>
+    <div class="font-bold">
+      [v0.0.14] Input text is greyed out if the value is <code>null</code>
+    </div>
+    <div class="text-xs">
+      <span style="color: red">*</span> Note: in v0.0.17, component throws error if
+      <code>model-value</code> is
+      <code>null</code>
+    </div>
     <div>
       Due to data structure saved in the database, the value <code>null</code> is necessary as one
       of the dropdown options

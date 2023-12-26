@@ -2,6 +2,7 @@ import DialogCloseVue from '@/views/dialog/DialogClose.vue'
 import DropdownListing from '@/views/dropdown-listing/DropdownListing.vue'
 import DropdownPlacementVue from '@/views/dropdown-placement/DropdownPlacement.vue'
 import DropdownFixVue from '@/views/dropdown/DropdownFix.vue'
+import TextFieldHelperVue from '@/views/text-field-helper/TextFieldHelper.vue'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const routes: RouteRecordRaw[] = [
@@ -31,6 +32,13 @@ export const routes: RouteRecordRaw[] = [
     component: DialogCloseVue,
     props: {
       name: '[Feature] Dialog Close API'
+    }
+  },
+  {
+    path: '/text-field-helper',
+    component: TextFieldHelperVue,
+    props: {
+      name: '[Bug] Text field helper'
     }
   }
 ]
