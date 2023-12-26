@@ -1,3 +1,4 @@
+import DateRangeTooBigVue from '@/views/date-range-too-big/DateRangeTooBig.vue'
 import DialogCloseVue from '@/views/dialog/DialogClose.vue'
 import DropdownListing from '@/views/dropdown-listing/DropdownListing.vue'
 import DropdownPlacementVue from '@/views/dropdown-placement/DropdownPlacement.vue'
@@ -39,6 +40,13 @@ export const routes: RouteRecordRaw[] = [
     component: TextFieldHelperVue,
     props: {
       name: '[Bug] Text field helper'
+    }
+  },
+  {
+    path: '/date-range-too-big',
+    component: DateRangeTooBigVue,
+    props: {
+      name: '[Bug] Date range too big'
     }
   }
 ]
