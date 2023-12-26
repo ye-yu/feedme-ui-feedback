@@ -15,13 +15,11 @@ const options = [
     value: { _id: 'kg', measurement: 'something' }
   }
 ]
-
-const selectedValue = ref(options[0].value)
-
-const optionsWorkaround = [
+const optionsCode1 = `
+const options = [
   {
     label: 'Gramme',
-    value: 'null' as const
+    value: null
   },
   {
     label: 'PCS',
@@ -32,11 +30,43 @@ const optionsWorkaround = [
     value: { _id: 'kg', measurement: 'something' }
   }
 ]
+`.trim()
+
+const selectedValue = ref(options[0].value)
+
+const optionsWorkaround = [
+  {
+    label: 'Gramme',
+    value: { value: null }
+  },
+  {
+    label: 'PCS',
+    value: { value: { _id: 'pcs', measurement: 'something' } }
+  },
+  {
+    label: 'Kilogramme',
+    value: { value: { _id: 'kg', measurement: 'something' } }
+  }
+]
+
+const optionsCode2 = `
+const optionsWorkaround = [
+  {
+    label: 'Gramme',
+    value: { value: null }
+  },
+  {
+    label: 'PCS',
+    value: { value: { _id: 'pcs', measurement: 'something' } }
+  },
+  {
+    label: 'Kilogramme',
+    value: { value: { _id: 'kg', measurement: 'something' } }
+  }
+]`.trim()
 
 const selectedValueWorkaround = ref(optionsWorkaround[0].value)
-const selectedValueActual = computed(() =>
-  selectedValueWorkaround?.value === 'null' ? null : selectedValueWorkaround.value
-)
+const selectedValueActual = computed(() => selectedValueWorkaround?.value?.value ?? null)
 </script>
 
 <template>
@@ -54,6 +84,9 @@ const selectedValueActual = computed(() =>
       of the dropdown options
     </div>
     <div>
+      <highlightjs language="javascript" :code="optionsCode1" />
+    </div>
+    <div>
       Desired output: when unit 'Gramme' is selected, the text color is not grayed (due the value
       holding <code>null</code> value)
     </div>
@@ -63,12 +96,13 @@ const selectedValueActual = computed(() =>
       :label="`Measurement --> ${JSON.stringify(selectedValue?._id ?? null)}`"
     />
     <div>
-      Current workaround is to normalise the <code>null</code> into string form <code>'null'</code>,
-      and then convert back the string form <code>'null'</code> into <code>null</code>, but this
-      adds code extra steps and validations on application to make sure the string form
-      <code>'null'</code> is converted to <code>null</code>.
+      Current workaround is to wrap the values in object <code>{value: null}</code>, and this
+      creates redundant code.
     </div>
-    <div>(See <code>selectedValueActual</code>)</div>
+    <div>
+      <highlightjs language="javascript" :code="optionsCode2" />
+    </div>
+
     <FmSelect
       :items="optionsWorkaround"
       v-model:model-value="selectedValueWorkaround"
