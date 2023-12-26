@@ -8,7 +8,10 @@ const textFieldCode1 = `
     value1.value.replace(/[aeuio]/g, '').length ? 'Must only contains A, E, U, I, O' : null
   )
 /script>
-<FmTextField v-model:model-value="value1" label="Vowels only!">
+<FmTextField v-model:model-value="value1">
+  <template #label>
+    Vowels
+  </template>
   <template #helper-text>
     <div class="text-red">{{ helper1 }}</div>
   </template>
@@ -16,7 +19,10 @@ const textFieldCode1 = `
 `.trim()
 
 const textFieldCode2 = `
-<FmTextField v-model:model-value="value1" label="Vowels only!" helper-text="true">
+<FmTextField v-model:model-value="value1" helper-text="true">
+  <template #label>
+    Vowels
+  </template>
   <template #helper-text>
     <div class="text-red">{{ helper1 }}</div>
   </template>
@@ -37,7 +43,8 @@ const helper1 = computed(() =>
     <div>
       <highlightjs language="xml" :code="textFieldCode1" />
     </div>
-    <FmTextField v-model:model-value="value1" label="Vowels only!">
+    <FmTextField v-model:model-value="value1">
+      <template #label> Vowels </template>
       <template #helper-text>
         <div class="text-red">{{ helper1 }}</div>
       </template>
@@ -46,7 +53,8 @@ const helper1 = computed(() =>
     <div>
       <highlightjs language="xml" :code="textFieldCode2" />
     </div>
-    <FmTextField v-model:model-value="value1" label="Vowels only!" helper-text="true">
+    <FmTextField v-model:model-value="value1" helper-text="true">
+      <template #label> Vowels </template>
       <template #helper-text>
         <div style="color: #fe1111">{{ helper1 }}</div>
       </template>
