@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import FmDateRangePickerProxy from './FmDateRangePickerProxy.vue'
 
 const dialog: DialogProvider = useDialog()
-const dateRangeModel = ref()
+const dateRangeModel = ref({})
 function openDialog() {
   const primaryActions: FooterActionButton = {
     text: 'Primary',
