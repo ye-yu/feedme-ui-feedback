@@ -1,3 +1,4 @@
+import ChipNotExpandableVue from '@/views/chip-not-expandable/ChipNotExpandable.vue'
 import DateRangeTooBigVue from '@/views/date-range-too-big/DateRangeTooBig.vue'
 import DialogCloseVue from '@/views/dialog/DialogClose.vue'
 import DropdownListing from '@/views/dropdown-listing/DropdownListing.vue'
@@ -8,6 +9,14 @@ import TextFieldHelperVue from '@/views/text-field-helper/TextFieldHelper.vue'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const routes: RouteRecordRaw[] = [
+  {
+    path: '/0-0-23-bugs',
+    component: ChipNotExpandableVue,
+    props: {
+      name: '[Bug] 0.0.23 Bugs'
+    }
+  },
+
   {
     path: '/dropdown-null-fix',
     component: DropdownFixVue,
