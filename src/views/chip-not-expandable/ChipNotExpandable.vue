@@ -66,6 +66,10 @@ const columnDefs: ColumnDef<ItemData>[] = [
       <div>
         <FmTable :row-data="data" :column-defs="columnDefs"></FmTable>
       </div>
+      <div>Using <code>:pin-header-rows="false"</code> seems not working too</div>
+      <div>
+        <FmTable :row-data="data" :column-defs="columnDefs" :pin-header-rows="false"></FmTable>
+      </div>
     </div>
     <div class="flex flex-col gap-3 mt-5">
       <div class="text-sm font-bold">
