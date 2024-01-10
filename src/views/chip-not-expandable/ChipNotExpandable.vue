@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/vue-table'
 import FM_TABLE_PAGINATION_OPTIONS from '@/views/chip-not-expandable/assets/fm-table-pagination-options.png'
 import FM_TABLE_PAGINATION_INVENTORY_PORTAL from '@/views/chip-not-expandable/assets/fm-table-in-inventory-portal.png'
 import FM_TABLE_PAGINATION_INVENTORY_PORTAL_CONSOLE from '@/views/chip-not-expandable/assets/fm-table-in-inventory-portal-console.png'
+import FM_BREADCRUMBS from '@/views/chip-not-expandable/assets/fm-breadcrumbs.png'
 interface ItemData {
   Item: string
   Code: string
@@ -42,6 +43,21 @@ const columnDefs: ColumnDef<ItemData>[] = [
   },
   {
     accessorKey: 'Price'
+  }
+]
+const breadcrumbs = [
+  {
+    label: 'Inventory',
+    route: '/',
+    disabled: true
+  },
+  {
+    label: 'Ingredients',
+    route: '/ingredients'
+  },
+  {
+    label: 'Unit',
+    route: '/ingredients/unit'
   }
 ]
 </script>
@@ -90,6 +106,16 @@ const columnDefs: ColumnDef<ItemData>[] = [
           :src="FM_TABLE_PAGINATION_INVENTORY_PORTAL_CONSOLE"
           alt="FmTable pagination in inventory portal console output"
         />
+      </div>
+    </div>
+    <div class="flex flex-col gap-3">
+      <div class="text-sm font-bold"># 4. FmBreadcrumb color and styling error</div>
+      <div>
+        <FmBreadcrumb :items="breadcrumbs" />
+      </div>
+      <div>Expected output</div>
+      <div>
+        <img :src="FM_BREADCRUMBS" alt="FmBreadcrumbs expected output" />
       </div>
     </div>
   </div>
