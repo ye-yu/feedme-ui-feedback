@@ -9,7 +9,7 @@ const currentRoute = useRoute()
 
 <template>
   <div class="flex w-screen">
-    <div class="flex flex-col shadow rounded h-screen" style="min-width: 300px">
+    <div class="flex flex-col shadow rounded h-screen flex-0" style="min-width: 300px">
       <div class="text-lg font-bold px-5 py-5 mb-2">Routes</div>
       <a
         :class="{
@@ -33,7 +33,7 @@ const currentRoute = useRoute()
         {{ typeof route.props === 'object' && route.props?.name }}
       </a>
     </div>
-    <div>
+    <div class="flex-1">
       <RouterView />
       <FmPlayground v-if="currentRoute.path === '/'" />
     </div>
