@@ -20,9 +20,13 @@ const textColorWhite = computed(
 
 function pushNewRule() {
   const mv = props.modelValue
+  const firstRoleId = getUnselectedRole().find((e) => e)?.roleId
+  if (!firstRoleId) {
+    return
+  }
   mv.rules ??= []
   mv.rules.push({
-    role: '',
+    roleId: firstRoleId,
     nextStateIds: []
   })
   emit('update:modelValue', mv)
@@ -33,6 +37,12 @@ function deleteRule(index: number) {
   mv.rules ??= []
   mv.rules.splice(index, 1)
   emit('update:modelValue', mv)
+}
+
+function getUnselectedRole(includeRoleId?: string) {
+  return props.roles.filter(
+    (e) => e.roleId === includeRoleId || !props.modelValue.rules.find((r) => r.roleId === e.roleId)
+  )
 }
 </script>
 
@@ -66,6 +76,7 @@ function deleteRule(index: number) {
     <div v-for="(_, index) in modelValue.rules" :key="index">
       <StatusFlowRoleActionForm
         :model-value="modelValue.rules[index]"
+        :roles="getUnselectedRole(modelValue.rules[index]?.roleId)"
         :states="states"
         :state-id="stateId"
         @click:delete="deleteRule(index)"
@@ -78,7 +89,7 @@ function deleteRule(index: number) {
       icon="add"
       @click="() => pushNewRule()"
     />
-    <FmMenuDivider />
+    <!-- <FmMenuDivider />
     <div class="flex flex-col gap-5">
       <div class="fm-typo-body-md-400">When switched to this state, the system should:</div>
     </div>
@@ -88,6 +99,6 @@ function deleteRule(index: number) {
       label="Add action"
       icon="add"
       @click="() => pushNewRule()"
-    />
+    /> -->
   </div>
 </template>

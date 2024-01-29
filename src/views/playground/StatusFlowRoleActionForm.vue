@@ -28,6 +28,13 @@ const availableStates = computed(() => {
     }))
 })
 
+const availableRoles = computed(() => {
+  return props.roles.map((e) => ({
+    label: e.name,
+    value: e.roleId
+  }))
+})
+
 function textColorShouldBeWhite(state: StateFormProps['modelValue']) {
   return luminance(state.stateColor ?? '') < 0.5
 }
@@ -49,7 +56,11 @@ function removeState(index: number) {
 
 <template>
   <div class="flex flex-wrap gap-3 items-center">
-    <FmTextField placeholder="Input role" v-model:model-value="modelValue.role" />
+    <FmSelect
+      placeholder="(Select role)"
+      v-model:model-value="modelValue.roleId"
+      :items="availableRoles"
+    />
     <div>can change PO status to</div>
     <template v-for="(state, index) in nextStates" :key="state.stateId">
       <div

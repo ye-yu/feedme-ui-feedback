@@ -180,6 +180,7 @@ const accordion = reactive({
       <template v-for="state in states" :key="state.stateId">
         <StatusFlowForm
           v-if="state.stateName"
+          :roles="roles"
           :states="states"
           :state-id="state.stateId"
           v-model:model-value="statusFlow[state.stateId]"
