@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { computed, h, reactive } from 'vue'
 import StateForm from './StateForm.vue'
 import type { StateFormProps } from './StateFormProps'
 import type { StatusFlowFormProps } from './StatusFlowFormProps'
 import StatusFlowForm from './StatusFlowForm.vue'
 import type { RoleFormProps } from './RoleFormProps'
 import RoleForm from './RoleForm.vue'
+import * as core from '@feedmepos/core'
+import z from 'zod'
+import type { ColumnDef } from '@tanstack/vue-table'
+
+type FdoPermissionRule = z.infer<(typeof core)['entity']['FdoPermissionRule']>
+type FdtoPermissionAccessRes = z.infer<(typeof core)['entity']['FdtoPermissionAccessRes']>
 
 const roles = reactive(new Array<RoleFormProps['modelValue']>())
 function newRole() {
@@ -37,6 +43,7 @@ const statusFlow = reactive({} as Record<string, StatusFlowFormProps['modelValue
 function newState() {
   states.push({
     stateName: '',
+    stateCode: '',
     stateId: `${Math.random()}`,
     stateColor: `#${Math.random().toString(16).substring(2, 8)}`
   })
@@ -48,26 +55,31 @@ function defaultStates() {
   const defaultStates: typeof states = [
     {
       stateName: 'Draft',
+      stateCode: 'draft',
       stateId: `${Math.random()}`,
       stateColor: `#171717`
     },
     {
       stateName: 'Pending Approval',
+      stateCode: 'pending_approval',
       stateId: `${Math.random()}`,
       stateColor: `#FFD700`
     },
     {
       stateName: 'Pending Receiving',
+      stateCode: 'pending_receiving',
       stateId: `${Math.random()}`,
       stateColor: `#008080`
     },
     {
       stateName: 'Received',
+      stateCode: 'received',
       stateId: `${Math.random()}`,
       stateColor: `#00bd00`
     },
     {
       stateName: 'Canceled',
+      stateCode: 'canceled',
       stateId: `${Math.random()}`,
       stateColor: `#ff3430`
     }
@@ -85,6 +97,133 @@ const accordion = reactive({
   roles: false,
   statuses: false,
   stateFlow: true
+})
+
+function getPermissionSubject(
+  from: StateFormProps['modelValue'],
+  to: StateFormProps['modelValue']
+) {
+  return `po::transition::${from.stateCode}::${to.stateCode}`
+}
+
+function getPermissionRules() {
+  const rules = Object.entries(statusFlow).flatMap(([stateId, flow]) => {
+    const state = states.find((e) => e.stateId === stateId)
+    if (!state) {
+      return []
+    }
+
+    const rules = flow.rules.flatMap((e) =>
+      e.nextStateIds.map((s) => states.find((e) => e.stateId === s)!).filter((e) => e)
+    )
+    if (!rules.length) {
+      return []
+    }
+
+    const permissionIdToRoleId = flow.rules.reduce(
+      (a, b) => {
+        for (const stateId of b.nextStateIds) {
+          const nextState = states.find((e) => e.stateId === stateId)
+          if (!nextState) {
+            continue
+          }
+          const subject = getPermissionSubject(state, nextState)
+          a[subject] ??= []
+          a[subject].push(b.roleId)
+        }
+        return a
+      },
+      {} as Record<string, string[]>
+    )
+    return Object.entries(permissionIdToRoleId).map(([subject, roleIds]) => {
+      const rule: FdoPermissionRule = {
+        label: subject,
+        subject: subject,
+        actions: ['manage'],
+        conditions: JSON.stringify({
+          roleId: {
+            $in: roleIds
+          }
+        })
+      }
+      return rule
+    })
+  })
+  return core.Permission(rules)
+}
+
+const permissionTable = computed(() => {
+  const rules = getPermissionRules()
+
+  const data = states.flatMap((from) => {
+    return states
+      .filter((e) => e.stateId !== from.stateId)
+      .map((to) => {
+        const permissionSubject = getPermissionSubject(from, to)
+        const permissionInfo = {
+          from,
+          to,
+          subject: permissionSubject
+        }
+        const rolesAccess = roles.reduce(
+          (a, b) => {
+            a[b.roleId] = rules.can({
+              subject: permissionSubject,
+              action: 'manage',
+              conditions: { roleId: b.roleId }
+            })
+            return a
+          },
+          {} as Record<string, FdtoPermissionAccessRes>
+        )
+        return {
+          ...permissionInfo,
+          ...rolesAccess
+        } as typeof permissionInfo & { [key: string]: FdtoPermissionAccessRes }
+      })
+  })
+  const columns: ColumnDef<(typeof data)[number]>[] = [
+    {
+      id: 'State From',
+      header: 'State From',
+      accessorKey: 'from.stateName'
+    },
+    {
+      id: 'State To',
+      header: 'State To',
+      accessorKey: 'to.stateName'
+    },
+    {
+      id: 'Permission Subject',
+      header: 'Permission Subject',
+      accessorKey: 'subject'
+    },
+    ...roles.map((e) => {
+      const def: ColumnDef<(typeof data)[number]> = {
+        id: `role_${e.roleId}`,
+        header: `${e.name}`,
+        cell(props) {
+          const row = props.row.original
+          return h(
+            'span',
+            {
+              class: {
+                'text-fm-color-typo-error': !row[e.roleId]?.result && row[e.roleId]?.reason,
+                'text-fm-color-typo-success': row[e.roleId]?.result
+              }
+            },
+            row[e.roleId]?.result ? 'Yes' : row[e.roleId]?.reason || 'Default'
+          )
+        }
+      }
+      return def
+    })
+  ]
+
+  return {
+    data,
+    columns
+  }
 })
 </script>
 
@@ -187,5 +326,12 @@ const accordion = reactive({
         />
       </template>
     </template>
+  </div>
+  <div class="px-[100px] py-5 flex flex-col gap-5 w-full">
+    <FmTable
+      :key="JSON.stringify({ states, statusFlow })"
+      :column-defs="permissionTable.columns"
+      :row-data="permissionTable.data"
+    />
   </div>
 </template>

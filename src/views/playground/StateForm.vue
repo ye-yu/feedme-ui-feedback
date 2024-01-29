@@ -16,6 +16,11 @@ const modelStateName = computed({
   },
   set(data: string) {
     modelValue.stateName = data
+    modelValue.stateCode = data
+      .toLocaleLowerCase()
+      .replace(/[^a-z]+/gi, '_')
+      .replace(/^_*/, '')
+      .replace(/_*$/, '')
     emit('update:modelValue', modelValue)
   }
 })
