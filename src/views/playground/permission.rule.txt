@@ -1,0 +1,30 @@
+<script setup lang="ts">
+import * as core from '@feedmepos/core'
+import { computed } from 'vue'
+import z from 'zod'
+
+type FdoPermissionRule = z.infer<(typeof core)['entity']['FdoPermissionRule']>
+const v = computed(() => {
+  const rule: FdoPermissionRule = {
+    label: 'Can transition state to "Confirm"',
+    subject: 'pos::state::action::confirm',
+    actions: ['manage'],
+    conditions: JSON.stringify({ roleId: { $in: ['admin'] } })
+  }
+
+  const permission = core.Permission([rule])
+  return permission.can({
+    subject: 'pos::state::action::confirm',
+    action: 'manage',
+    conditions: {
+      roleId: 'admin'
+    }
+  })
+})
+</script>
+
+<template>
+  <div class="px-[100px] py-5 flex flex-col gap-5 w-full">
+    {{ v }}
+  </div>
+</template>

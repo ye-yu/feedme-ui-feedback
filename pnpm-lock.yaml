@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@feedmepos/core':
+    specifier: ^2.1.12
+    version: 2.1.12
   '@feedmepos/mf-common':
     specifier: ^1.1.0
     version: 1.1.0(tailwindcss@3.4.0)(typescript@5.2.2)(vite@4.5.1)
@@ -29,6 +32,9 @@ dependencies:
   vue-router:
     specifier: ^4.2.5
     version: 4.2.5(vue@3.3.13)
+  zod:
+    specifier: 3.17.9
+    version: 3.17.9
 
 devDependencies:
   '@rushstack/eslint-patch':
@@ -350,8 +356,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@feedmepos/core@2.1.3:
-    resolution: {integrity: sha512-dVZCEangBBDsPzT9zyJ/poZLDJa8URAeZvah9yZRGizm7eyceV8H0FC0U+W/0kfijJPvEHBI+QNnjsFJgNmgaA==, tarball: https://npm.pkg.github.com/download/@feedmepos/core/2.1.3/440ce9211ae455c3185e873757db71af88f9b37a}
+  /@feedmepos/core@2.1.12:
+    resolution: {integrity: sha512-blI7t7YHm51ZMY9IN35PxKVu6tFpkGCIc15YWsJ9p7k4BhDO/S7Oc8NO+OkS2vzlqtE9dczMyglvzDS0sHPO7w==, tarball: https://npm.pkg.github.com/download/@feedmepos/core/2.1.12/71d699f289e93bed9fbb1dbcf22d875f85566821}
     dependencies:
       '@feedmepos/zod-common': 1.0.2
       dayjs: 1.11.10
@@ -364,7 +370,7 @@ packages:
   /@feedmepos/mf-common@1.1.0(tailwindcss@3.4.0)(typescript@5.2.2)(vite@4.5.1):
     resolution: {integrity: sha512-7+gcUi3Bs8Ezj5Cb9Vc/Qi6U5Axvowxa16hI8INbZrfCaY8TTjxtZX6WDBGnlzdlsnuUgaCPjo+lMG7xN/uKkw==, tarball: https://npm.pkg.github.com/download/@feedmepos/mf-common/1.1.0/fff1dcb689a5f1a3e160182b927b27d70194183f}
     dependencies:
-      '@feedmepos/core': 2.1.3
+      '@feedmepos/core': 2.1.12
       '@feedmepos/ui-library': 0.0.14(tailwindcss@3.4.0)(vite@4.5.1)(vue@3.3.13)
       axios: 1.6.2
       pinia: 2.1.7(typescript@5.2.2)(vue@3.3.13)
